@@ -1,0 +1,619 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071426">
+  <meta name="description" content="HostelTrack simplifies hostel operations with digital leave management, mess management, student records and staff access.">
+  <title>HostelTrack — Smarter Hostel Management</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #071426;
+      --surface: #10233c;
+      --surface2: #142d4c;
+      --blue: #168bff;
+      --cyan: #36d9ff;
+      --white: #f4f8ff;
+      --muted: #a9bad0;
+      --border: rgba(255,255,255,.09);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(7,20,38,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      min-height: 76px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.7px;
+    }
+
+    .brand-icon {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #061326;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .brand span span { color: var(--cyan); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-cta, .primary-btn {
+      background: linear-gradient(110deg, var(--blue), #0874e8);
+      color: white;
+      padding: 12px 21px;
+      border-radius: 9px;
+      font-weight: 700;
+      display: inline-block;
+      transition: .2s;
+    }
+
+    .nav-cta:hover, .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(22,139,255,.25);
+    }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: 0;
+      color: white;
+      font-size: 27px;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 105px 0 90px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 75% 30%, rgba(22,139,255,.17), transparent 42%),
+        radial-gradient(ellipse at 15% 80%, rgba(54,217,255,.07), transparent 35%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 65px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 5.5vw, 66px);
+      line-height: 1.08;
+      letter-spacing: -2.8px;
+      margin-bottom: 24px;
+    }
+
+    h1 span {
+      background: linear-gradient(100deg, var(--blue), var(--cyan));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 540px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--border);
+      padding: 12px 21px;
+      border-radius: 9px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .secondary-btn:hover { border-color: var(--cyan); }
+
+    .dashboard {
+      background: linear-gradient(145deg, #142d4b, #0c1c32);
+      border: 1px solid rgba(54,217,255,.2);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.28);
+      transform: perspective(1000px) rotateY(-5deg);
+    }
+
+    .dash-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .dash-title { font-weight: 800; font-size: 17px; }
+
+    .live {
+      color: #62e7b0;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .dash-card {
+      background: rgba(255,255,255,.045);
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 13px;
+    }
+
+    .dash-card small { color: var(--muted); font-size: 12px; }
+
+    .dash-card strong {
+      display: block;
+      font-size: 25px;
+      margin-top: 7px;
+    }
+
+    .dash-wide {
+      grid-column: 1 / -1;
+      background: linear-gradient(110deg, rgba(22,139,255,.18), rgba(54,217,255,.08));
+    }
+
+    .dash-wide strong { color: var(--cyan); }
+
+    section { padding: 90px 0; }
+
+    .section-heading {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(30px, 4vw, 43px);
+      letter-spacing: -1.4px;
+      margin-bottom: 14px;
+    }
+
+    .section-heading p { color: var(--muted); }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 27px;
+      border-radius: 15px;
+      transition: .25s;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      border-color: rgba(54,217,255,.4);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(22,139,255,.15);
+      color: var(--cyan);
+      font-size: 23px;
+      margin-bottom: 20px;
+    }
+
+    .feature h3 { font-size: 18px; margin-bottom: 10px; }
+
+    .feature p { color: var(--muted); font-size: 14px; }
+
+    .audience { background: #091a30; }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .audience-card {
+      padding: 27px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .audience-card h3 { margin-bottom: 9px; }
+    .audience-card p { color: var(--muted); font-size: 14px; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .step {
+      padding: 22px;
+      border-left: 2px solid var(--blue);
+      background: rgba(255,255,255,.035);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .step-number {
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .step p { color: var(--muted); font-size: 13px; margin-top: 7px; }
+
+    .cta {
+      text-align: center;
+      background:
+        radial-gradient(ellipse at center, rgba(22,139,255,.2), transparent 65%),
+        #0a1b31;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cta h2 {
+      font-size: clamp(30px, 4vw, 44px);
+      margin-bottom: 14px;
+    }
+
+    .cta p {
+      color: var(--muted);
+      margin: 0 auto 27px;
+      max-width: 600px;
+    }
+
+    footer {
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media(max-width: 850px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 45px; }
+      .dashboard { transform: none; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media(max-width: 600px) {
+      .menu-btn { display: block; }
+      .nav-cta { display: none; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 76px;
+        left: 0;
+        right: 0;
+        padding: 22px 5%;
+        background: #0b1c32;
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 19px;
+      }
+
+      .nav-links.open { display: flex; }
+      .hero { padding: 75px 0 65px; }
+      section { padding: 68px 0; }
+      .features, .audience-grid, .steps { grid-template-columns: 1fr; }
+      .dash-card { padding: 13px; }
+      .dash-card strong { font-size: 21px; }
+      .dashboard { padding: 17px; }
+      h1 { letter-spacing: -1.8px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <a href="#" class="brand">
+        <div class="brand-icon">H</div>
+        <span>Hostel<span>Track</span></span>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#solutions">Solutions</a>
+        <a href="#how">How it works</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <a class="nav-cta" href="#contact">Request a Demo</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">A smarter way to manage hostels</div>
+        <h1>Hostel management.<br><span>Simplified.</span></h1>
+        <p class="hero-text">
+          Bring students, wardens and mess operations together with
+          one connected hostel management platform. Less paperwork.
+          Better coordination. Smarter decisions.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="primary-btn">Request a Demo →</a>
+          <a href="#features" class="secondary-btn">Explore Features</a>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <div class="dash-top">
+          <div class="dash-title">HostelTrack Overview</div>
+          <div class="live">● MANAGEMENT DASHBOARD</div>
+        </div>
+        <div class="dash-grid">
+          <div class="dash-card">
+            <small>Student Management</small>
+            <strong>Organised</strong>
+          </div>
+          <div class="dash-card">
+            <small>Leave Requests</small>
+            <strong>Digital</strong>
+          </div>
+          <div class="dash-card">
+            <small>Mess Operations</small>
+            <strong>Connected</strong>
+          </div>
+          <div class="dash-card">
+            <small>Staff Access</small>
+            <strong>Role-based</strong>
+          </div>
+          <div class="dash-card dash-wide">
+            <small>One platform for hostel operations</small>
+            <strong>Everything in one place.</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Platform capabilities</div>
+        <h2>Everything your hostel needs</h2>
+        <p>Tools designed to simplify everyday hostel administration and improve coordination.</p>
+      </div>
+
+      <div class="features">
+        <article class="feature">
+          <div class="feature-icon">📋</div>
+          <h3>Digital Leave Management</h3>
+          <p>Submit leave applications, manage approvals and verify student departures and returns with QR workflows.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">🎓</div>
+          <h3>Student Management</h3>
+          <p>Organise student records, registration requests, hostel assignments and account approvals.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">🍽️</div>
+          <h3>Mess Operations</h3>
+          <p>Help mess teams understand student availability and coordinate dinner preparation.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">💳</div>
+          <h3>Mess Fee Records</h3>
+          <p>Record payments, track balances and maintain student payment statements.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">🛡️</div>
+          <h3>Role-based Staff Access</h3>
+          <p>Separate access for wardens, mess in-charge, teachers, HODs, security and administrators.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">⚙️</div>
+          <h3>Personalised Experience</h3>
+          <p>Customise the app appearance with theme and accent-colour preferences.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="audience" id="solutions">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Who we serve</div>
+        <h2>Built for hostel communities</h2>
+        <p>A flexible platform for institutions and accommodation providers.</p>
+      </div>
+
+      <div class="audience-grid">
+        <article class="audience-card">
+          <h3>🏫 Colleges & Universities</h3>
+          <p>Coordinate hostel administration, student leave and mess operations across campus hostels.</p>
+        </article>
+
+        <article class="audience-card">
+          <h3>🏢 Private Hostels</h3>
+          <p>Bring student records, staff workflows and everyday hostel operations into one system.</p>
+        </article>
+
+        <article class="audience-card">
+          <h3>🏠 Hostel Operators</h3>
+          <p>Explore a more organised way to manage accommodation and communicate with residents.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Simple workflow</div>
+        <h2>One platform. Connected teams.</h2>
+        <p>HostelTrack helps different teams coordinate their responsibilities.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01 / STUDENTS</div>
+          <h3>Apply & access</h3>
+          <p>Students use their accounts to access hostel services and submit leave requests.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">02 / WARDENS</div>
+          <h3>Review & approve</h3>
+          <p>Wardens review applications and manage hostel-related workflows.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">03 / STAFF</div>
+          <h3>Verify & coordinate</h3>
+          <p>Authorised staff support verification and other assigned responsibilities.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">04 / MESS TEAM</div>
+          <h3>Plan operations</h3>
+          <p>Mess teams use availability information and payment records to support daily operations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="container">
+      <div class="eyebrow">Let's connect</div>
+      <h2>Ready to modernise your hostel?</h2>
+      <p>
+        Interested in HostelTrack for your college or private hostel?
+        Get in touch to discuss a product demonstration and deployment.
+      </p>
+      <p><strong>Contact details coming soon.</strong></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div class="brand">
+      <div class="brand-icon">H</div>
+      <span>Hostel<span>Track</span></span>
+    </div>
+    <p>© <span id="year"></span> HostelTrack. All rights reserved.</p>
+    <p>Smarter hostel management.</p>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+    });
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
